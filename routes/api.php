@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth:organization']], function () {
         Route::delete('{id}', [OrganizationController::class, 'delete']);    // Delete organization by ID
         Route::get('{id}', [OrganizationController::class, 'show']);          // Show organization details by ID
     });
+    Route::post('organizations/doners', [OrganizationController::class, 'getDonersByOrganization']);
 
 
 

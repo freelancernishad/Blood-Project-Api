@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('district')->nullable();
             $table->string('thana')->nullable();
             $table->string('union')->nullable();
-            $table->string('org')->nullable();
+            $table->unsignedBigInteger('org')->nullable();
+            $table->foreign('org')->references('id')->on('organizations');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

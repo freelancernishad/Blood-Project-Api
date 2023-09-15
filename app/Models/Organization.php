@@ -41,6 +41,6 @@ class Organization extends Authenticatable implements JWTSubject
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'org');
     }
 }

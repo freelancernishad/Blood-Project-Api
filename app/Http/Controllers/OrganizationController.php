@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-
-
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class OrganizationController extends Controller
@@ -127,4 +128,21 @@ class OrganizationController extends Controller
 
         return response()->json($organization, 200);
     }
+
+
+
+    public function getDonersByOrganization(Request $request)
+    {
+        $organization = Auth::guard('organization')->user();
+        if (!$organization) {
+            return response()->json(['message' => 'Organization not found'], 404);
+        }
+        $users = User::where('org', $organization->id)->paginate(20);
+        return response()->json($users, 200);
+    }
+
+
+
+
+
 }

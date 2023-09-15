@@ -57,11 +57,17 @@ class User extends Authenticatable implements JWTSubject
     ];
 
 
-
     public function organization()
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(Organization::class, 'org');
     }
+
+
+    public function donationLogs()
+    {
+        return $this->hasMany(DonationLog::class);
+    }
+
 
  // Required method from JWTSubject
  public function getJWTIdentifier()
