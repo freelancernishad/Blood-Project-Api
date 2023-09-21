@@ -11,6 +11,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\DonationLogController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationAuthController;
@@ -74,6 +75,8 @@ use App\Http\Controllers\OrganizationAuthController;
 Route::get('doner/{id}', [UserController::class, 'show']);
 
 
+
+
 //// user auth
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/check/login', [AuthController::class, 'checkTokenExpiration'])->name('checklogin');
@@ -88,7 +91,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::delete('{id}', [UserController::class, 'delete']);    // Delete user by ID
         Route::get('{id}', [UserController::class, 'show']);          // Show user details by ID
     });
-
+    Route::post('users/change-password', [UserController::class, 'changePassword']);
+    Route::post('users/update/donate/date', [DonationLogController::class, 'store']);
     Route::get('/user-access', function (Request $request) {
         return 'user access';
     });
@@ -112,7 +116,8 @@ Route::group(['middleware' => ['auth:organization']], function () {
     });
     Route::post('organization/doners', [OrganizationController::class, 'getDonersByOrganization']);
 
-
+    Route::post('organization/change-password', [OrganizationController::class, 'changePassword']);
+    Route::post('organization/update/donate/date', [DonationLogController::class, 'store']);
 
 
     Route::get('/organization-access', function (Request $request) {

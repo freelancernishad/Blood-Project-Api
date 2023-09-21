@@ -71,17 +71,13 @@ class OrganizationController extends Controller
     // Organization update
     public function update(Request $request, $id)
     {
+
+     
         $organization = Organization::find($id);
 
-        if (!$organization) {
-            return response()->json(['message' => 'Organization not found'], 404);
-        }
 
         $validator = Validator::make($request->all(), [
-            'logo' => 'nullable|string|max:255',
-            'name' => 'required|string|max:255',
             'mobile' => [
-                'required',
                 'string',
                 'max:15',
                 Rule::unique('organizations')->ignore($organization->id),
@@ -96,6 +92,12 @@ class OrganizationController extends Controller
         $organization->logo = $request->logo;
         $organization->name = $request->name;
         $organization->mobile = $request->mobile;
+        $organization->whatsapp_number = $request->whatsapp_number;
+        $organization->division = $request->division;
+        $organization->district = $request->district;
+        $organization->thana = $request->thana;
+        $organization->union = $request->union;
+
         // Update other fields here
 
         $organization->save();
@@ -147,6 +149,23 @@ class OrganizationController extends Controller
     }
 
 
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+           'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+       ]);
+       if ($validator->fails()) {
+           return response()->json(['errors' => $validator->errors()], 400);
+       }
+       $user = Auth::guard('organization')->user();
+        if (!Hash::check($request->current_password, $user->password)) {
+           return response()->json(['message' => 'Current password is incorrect.'], 400);
+        }
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+        return response()->json(['message' => 'Password changed successfully.'], 200);
+    }
 
 
 

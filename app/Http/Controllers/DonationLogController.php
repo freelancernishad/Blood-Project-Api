@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DonationLog;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DonationLogController extends Controller
 {
@@ -20,8 +22,35 @@ class DonationLogController extends Controller
 
     public function store(Request $request)
     {
+
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'date' => 'required',
+            'blood_taker_name' => 'required',
+            'blood_taker_phone' => 'required',
+            'address' => 'required',
+            'hospital' => 'required',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        $user_id = $request->user_id;
+        $date = date("Y-m-d", strtotime($request->date));
+        $user = User::find($user_id);
+        $user->last_donate_date = $date;
+        $user->save();
+
         DonationLog::create($request->all());
-        return redirect()->route('donation-logs.index')->with('success', 'Donation log created successfully');
+        return response()->json(['message' => 'Donation log created successfully'], 201);
+
+
+
+
+
     }
 
     public function edit(DonationLog $donationLog)
