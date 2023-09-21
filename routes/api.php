@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\StudentController;
@@ -70,7 +71,7 @@ use App\Http\Controllers\OrganizationAuthController;
 
 
 
-
+Route::get('doner/{id}', [UserController::class, 'show']);
 
 
 //// user auth

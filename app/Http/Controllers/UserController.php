@@ -61,7 +61,7 @@ class UserController extends Controller
      // Show user details
      public function show($id)
      {
-         $user = User::find($id);
+         $user = User::with(['organization','donationLogs'])->find($id);
 
          if (!$user) {
              return response()->json(['message' => 'User not found'], 404);
