@@ -133,11 +133,16 @@ class OrganizationController extends Controller
 
     public function getDonersByOrganization(Request $request)
     {
+        $perpage = 20;
+        if($request->perpage){
+            $perpage = $request->perpage;
+        }
+
         $organization = Auth::guard('organization')->user();
         if (!$organization) {
             return response()->json(['message' => 'Organization not found'], 404);
         }
-        $users = User::with(['organization','donationLogs'])->where('org', $organization->id)->paginate(20);
+        $users = User::with(['organization','donationLogs'])->where('org', $organization->id)->paginate($perpage);
         return response()->json($users, 200);
     }
 

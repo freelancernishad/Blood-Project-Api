@@ -70,6 +70,9 @@ use App\Http\Controllers\OrganizationAuthController;
 
 
 
+
+
+
 //// user auth
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/check/login', [AuthController::class, 'checkTokenExpiration'])->name('checklogin');
