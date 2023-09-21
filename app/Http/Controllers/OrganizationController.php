@@ -120,7 +120,7 @@ class OrganizationController extends Controller
     // Show organization details
     public function show($id)
     {
-        $organization = Organization::find($id);
+        $organization = Organization::with('doners')->find($id);
 
         if (!$organization) {
             return response()->json(['message' => 'Organization not found'], 404);
