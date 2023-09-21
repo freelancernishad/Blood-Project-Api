@@ -137,7 +137,7 @@ class OrganizationController extends Controller
         if (!$organization) {
             return response()->json(['message' => 'Organization not found'], 404);
         }
-        $users = User::where('org', $organization->id)->paginate(20);
+        $users = User::with(['organization','donationLogs'])->where('org', $organization->id)->paginate(20);
         return response()->json($users, 200);
     }
 
