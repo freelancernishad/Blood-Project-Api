@@ -73,7 +73,7 @@ use App\Http\Controllers\OrganizationAuthController;
 
 
 Route::get('doner/{id}', [UserController::class, 'show']);
-
+Route::get('filter-doners', [UserController::class, 'filterUsers']);
 
 
 

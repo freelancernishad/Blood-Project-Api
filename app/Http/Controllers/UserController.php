@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -101,5 +102,65 @@ class UserController extends Controller
          return response()->json(['message' => 'Password changed successfully.'], 200);
      }
 
+     public function filterUsers(Request $request)
+     {
 
+
+        $validator = Validator::make($request->all(), [
+            'blood_group' => 'required',
+            'filter_by' => 'required|in:union,org', // Assuming you have a select input for this
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+
+         // Get the selected blood_group and filter_by values from the request
+         $bloodGroup = $request->input('blood_group');
+
+         $bloodGrade = explode(',',$bloodGroup);
+        if($bloodGrade[1]=='p'){
+            $bloodGroup = $bloodGrade[0]."+";
+        }else{
+            $bloodGroup = $bloodGrade[0]."-";
+        }
+
+
+
+         $filterBy = $request->input('filter_by');
+
+         // Calculate the date 4 months ago
+         $fourMonthsAgo = Carbon::now()->subMonths(4);
+         $fourMonthsAgo = date('Y-m-d',strtotime($fourMonthsAgo));
+
+         // Initialize a query builder
+         $query = User::query();
+         $query->with(['organization', 'donationLogs']);
+
+         // Add the blood_group condition
+         $query->where('blood_group', $bloodGroup);
+         // Add the filter_by condition (either union or org)
+         if ($filterBy === 'union') {
+             $query->where('union', $request->input('search'));
+         } elseif ($filterBy === 'org') {
+             $query->where('org', $request->input('search'));
+         }
+
+         // Add the condition for last_donate_date over 4 months old
+
+         $query->where('last_donate_date', '<', $fourMonthsAgo);
+
+         // Execute the query and retrieve the filtered users
+
+         $perpage = 20;
+         if($request->perpage){
+             $perpage = $request->perpage;
+         }
+
+         $filteredUsers = $query->paginate($perpage);
+
+         // Return the filtered users as JSON response
+         return response()->json(['doners' => $filteredUsers],200);
+     }
 }
