@@ -186,4 +186,23 @@ class OrganizationController extends Controller
         return response()->json(['organizations' => $organizations]);
     }
 
+    public function listOrganizationsWithPaginate(Request $request)
+    {
+        $unionFilter = $request->input('union'); // Get the union parameter from the request
+
+        // Query organizations based on the union filter (if provided)
+        $query = Organization::query();
+        // $query->with(['doners']);
+        if ($unionFilter) {
+            $query->where('union', $unionFilter);
+        }
+        $perpage = 20;
+        //  if($request->perpage){
+        //      $perpage = $request->perpage;
+        //  }
+        $organizations = $query->paginate($perpage);
+
+        return response()->json(['organizations' => $organizations]);
+    }
+
 }

@@ -77,6 +77,7 @@ Route::get('doner/{id}', [UserController::class, 'show']);
 Route::get('filter-doners', [UserController::class, 'filterUsers']);
 Route::get('/donated-users', [UserController::class, 'listDonatedUsers']);
 Route::get('/organizations', [OrganizationController::class, 'listOrganizations']);
+Route::get('/organizations/lists', [OrganizationController::class, 'listOrganizationsWithPaginate']);
 
 
 
