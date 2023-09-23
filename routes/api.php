@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\DonationLogController;
@@ -136,6 +137,28 @@ Route::post('admin/create', [AdminController::class, 'create']);
 
 Route::group(['middleware' => ['auth:admin']], function () {
     Route::post('admin/logout', [AdminAuthController::class, 'logout']);
+
+
+
+
+
+
+
+    // Routes for the CategoryController
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
+    Route::post('/categories', [CategoryController::class, 'store']);
+    Route::put('/categories/{id}', [CategoryController::class, 'update']);
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+
+    // Additional routes for category relationships
+    Route::get('/categories/{id}/ancestors', [CategoryController::class, 'ancestors']);
+    Route::get('/categories/{id}/descendants', [CategoryController::class, 'descendants']);
+
+
+
+
+
     Route::get('/admin-access', function (Request $request) {
         return 'admin access';
     });

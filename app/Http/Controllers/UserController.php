@@ -154,9 +154,9 @@ class UserController extends Controller
          // Execute the query and retrieve the filtered users
 
          $perpage = 20;
-         if($request->perpage){
-             $perpage = $request->perpage;
-         }
+        //  if($request->perpage){
+        //      $perpage = $request->perpage;
+        //  }
 
          $filteredUsers = $query->paginate($perpage);
 
