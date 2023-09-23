@@ -173,7 +173,7 @@ class OrganizationController extends Controller
 
         // Query organizations based on the union filter (if provided)
         $query = Organization::query();
-
+        // $query->with(['doners']);
         if ($unionFilter) {
             $query->where('union', $unionFilter);
         }
@@ -181,7 +181,7 @@ class OrganizationController extends Controller
         //  if($request->perpage){
         //      $perpage = $request->perpage;
         //  }
-        $organizations = $query->paginate($perpage);
+        $organizations = $query->get();
 
         return response()->json(['organizations' => $organizations]);
     }
