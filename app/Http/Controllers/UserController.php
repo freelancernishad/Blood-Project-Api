@@ -163,4 +163,21 @@ class UserController extends Controller
          // Return the filtered users as JSON response
          return response()->json(['doners' => $filteredUsers],200);
      }
+
+
+
+     public function listDonatedUsers(Request $request)
+     {
+        $perpage = 20;
+        //  if($request->perpage){
+        //      $perpage = $request->perpage;
+        //  }
+
+
+         // Retrieve users who have at least one donation log
+         $donatedUsers = User::has('donationLogs')->with(['organization', 'donationLogs'])->paginate($perpage);
+
+         return response()->json(['donated_users' => $donatedUsers]);
+     }
+
 }

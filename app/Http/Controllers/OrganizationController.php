@@ -72,7 +72,7 @@ class OrganizationController extends Controller
     public function update(Request $request, $id)
     {
 
-     
+
         $organization = Organization::find($id);
 
 
@@ -167,6 +167,23 @@ class OrganizationController extends Controller
         return response()->json(['message' => 'Password changed successfully.'], 200);
     }
 
+    public function listOrganizations(Request $request)
+    {
+        $unionFilter = $request->input('union'); // Get the union parameter from the request
 
+        // Query organizations based on the union filter (if provided)
+        $query = Organization::query();
+
+        if ($unionFilter) {
+            $query->where('union', $unionFilter);
+        }
+        $perpage = 20;
+        //  if($request->perpage){
+        //      $perpage = $request->perpage;
+        //  }
+        $organizations = $query->paginate($perpage);
+
+        return response()->json(['organizations' => $organizations]);
+    }
 
 }
