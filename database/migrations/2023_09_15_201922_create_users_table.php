@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->enum('gander', ['Male', 'Female', 'Other'])->default('Male');
             $table->string('gardiant_phone')->nullable();
-            $table->date('last_donate_date');
+            $table->date('last_donate_date')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('division')->nullable();
             $table->string('district')->nullable();

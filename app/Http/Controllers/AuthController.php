@@ -91,8 +91,6 @@ $token = $request->token;
          // User registration
          public function register(Request $request)
          {
-
-
              $validator = Validator::make($request->all(), [
                  'name' => 'required|string|max:255',
                  'mobile' => [
